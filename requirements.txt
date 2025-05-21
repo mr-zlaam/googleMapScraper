@@ -1,0 +1,10 @@
+# CSV and JSON processing
+pandas>=1.4.0
+
+# Async scraping with Playwright
+playwright>=1.42.0
+
+# For async context support in older Python versions (optional but safe)
+asyncio
+
+# NOTE: You must run `playwright install` once after installing this file
