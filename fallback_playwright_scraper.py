@@ -4,16 +4,12 @@ from playwright.async_api import async_playwright
 import time
 import re
 import csv
+import argparse
 
-INPUT_FILE = "links.json"
-OUTPUT_FILE_CSV = "output_results.csv"
-FAILED_FILE_CSV = "failed_links.csv"
-MAX_CONCURRENT_TASKS = 10
-BATCH_SIZE = 20
-URL_LIMIT = 100
 
 def clean_text(text):
     return re.sub(r"[^\x00-\x7F]+", "", text).strip()
+
 
 async def scrape_page(context, url, semaphore):
     async with semaphore:
@@ -50,7 +46,8 @@ async def scrape_page(context, url, semaphore):
             try:
                 rating_elem = await page.query_selector('//span[contains(@aria-label, "stars")] | //div[contains(@aria-label, "stars")]')
                 rating_text = await rating_elem.get_attribute("aria-label") if rating_elem else ""
-                data["rating"] = re.search(r"[\d.]+", rating_text).group() if rating_text else ""
+                data["rating"] = re.search(
+                    r"[\d.]+", rating_text).group() if rating_text else ""
             except:
                 data["rating"] = ""
 
@@ -79,7 +76,8 @@ async def scrape_page(context, url, semaphore):
             print(f"✅ {data['name']}")
         except Exception as e:
             summary = str(e).split("\n")[0][:100]
-            safe_title = url.split("/place/")[-1].split("/")[0].replace("+", " ")
+            safe_title = url.split(
+                "/place/")[-1].split("/")[0].replace("+", " ")
             print(f"⚠️ Skipped: {safe_title} (Reason: Timeout or navigation error)")
             data["name"] = safe_title
             data["error"] = "Navigation Timeout or Load Failure"
@@ -87,24 +85,25 @@ async def scrape_page(context, url, semaphore):
             await page.close()
             return data
 
-async def main():
+
+async def main(input_file, output_file_csv, failed_file_csv, max_concurrent_tasks, batch_size, url_limit):
     start_time = time.time()
 
-    with open(INPUT_FILE, "r") as f:
-        urls = json.load(f)[:URL_LIMIT]
+    with open(input_file, "r") as f:
+        urls = json.load(f)[:url_limit]
 
-    print(f"📥 Loaded {len(urls)} links (limit: {URL_LIMIT})\n")
+    print(f"📥 Loaded {len(urls)} links (limit: {url_limit})\n")
     all_results = []
 
-    semaphore = asyncio.Semaphore(MAX_CONCURRENT_TASKS)
+    semaphore = asyncio.Semaphore(max_concurrent_tasks)
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context()
 
-        for i in range(0, len(urls), BATCH_SIZE):
-            batch = urls[i:i + BATCH_SIZE]
-            print(f"\n🔄 Processing batch {i // BATCH_SIZE + 1} ({len(batch)} URLs)...")
+        for i in range(0, len(urls), batch_size):
+            batch = urls[i:i + batch_size]
+            print(f"\n🔄 Processing batch {   i // batch_size + 1} ({len(batch)} URLs)...")
             tasks = [scrape_page(context, url, semaphore) for url in batch]
             results = await asyncio.gather(*tasks)
             all_results.extend(results)
@@ -116,13 +115,13 @@ async def main():
 
     # Save successful results
     keys = sorted(set().union(*(d.keys() for d in unique_results)))
-    with open(OUTPUT_FILE_CSV, "w", newline='', encoding="utf-8") as f:
+    with open(output_file_csv, "w", newline='', encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=keys)
         writer.writeheader()
         writer.writerows(unique_results)
 
     # Save failed URLs separately
-    with open(FAILED_FILE_CSV, "w", newline='', encoding="utf-8") as f:
+    with open(failed_file_csv, "w", newline='', encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["url", "error"])
         for r in unique_results:
@@ -131,10 +130,34 @@ async def main():
 
     elapsed = int(time.time() - start_time)
     minutes, seconds = divmod(elapsed, 60)
-    print(f"\n📊 Scraped: {len(unique_results)} total, with {sum('error' in x for x in unique_results)} failed entries.")
-    print(f"💾 Output saved to: {OUTPUT_FILE_CSV}")
-    print(f"📂 Failed links saved to: {FAILED_FILE_CSV}")
+    print(f"\n📊 Scraped: {len(unique_results)} total, with {  sum('error' in x for x in unique_results)} failed entries.")
+    print(f"💾 Output saved to: {output_file_csv}")
+    print(f"📂 Failed links saved to: {failed_file_csv}")
     print(f"⏱️ Time taken: {minutes:02d}:{seconds:02d}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(
+        description="Google Maps Scraper using Playwright")
+    parser.add_argument("--input", required=True,
+                        help="Input JSON file with URLs")
+    parser.add_argument("--output", required=True,
+                        help="Output CSV file for results")
+    parser.add_argument("--failed", default="failed_links.csv",
+                        help="Output CSV file for failed URLs")
+    parser.add_argument("--max-concurrent", type=int,
+                        default=10, help="Maximum concurrent tasks")
+    parser.add_argument("--batch-size", type=int, default=20,
+                        help="Batch size for processing URLs")
+    parser.add_argument("--url-limit", type=int, default=100,
+                        help="Maximum number of URLs to process")
+
+    args = parser.parse_args()
+
+    asyncio.run(main(
+        input_file=args.input,
+        output_file_csv=args.output,
+        failed_file_csv=args.failed,
+        max_concurrent_tasks=args.max_concurrent,
+        batch_size=args.batch_size,
+        url_limit=args.url_limit
+    ))

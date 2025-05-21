@@ -1,0 +1,9 @@
+services:
+  scraper_1:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_1
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_1.json --output output/output_scraper_1.csv --failed output/failed_links_1.csv

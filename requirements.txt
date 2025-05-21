@@ -1,5 +1,6 @@
 # CSV and JSON processing
-pandas>=1.4.0
+#   ** install pandas before running the container to  get maximum speed""
+# pandas>=1.4.0
 
 # Async scraping with Playwright
 playwright>=1.42.0

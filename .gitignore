@@ -3,3 +3,4 @@ links.csv
 links.json
 output_results.csv
 failed_links.csv
+output/*
