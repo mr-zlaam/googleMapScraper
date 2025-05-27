@@ -1,88 +1,44 @@
-# 🗺️ Google Maps Business Scraper
-
-This project automates the extraction of business data from Google Maps links. It includes two main Python scripts:
-
-1. `convert_csv_to_json.py` – Converts URLs from a CSV file to a clean JSON format.
-2. `fallback_playwright_scraper.py` – Uses Playwright to scrape business data from those URLs.
-
----
-
-## 📂 Overview
-
-**Step 1**: Convert your raw CSV file (e.g., exported from a lead list) into a clean JSON list of Google Maps URLs.
-
-**Step 2**: Scrape business details such as:
-- Name
-- Address
-- Phone number
-- Website
-- Rating
-- Category
-- Opening hours
-- Short description
-
----
-
-## 🛠️ Requirements
-
-- Python 3.7 or higher
-- pip (Python package manager)
-- Google Chrome or Chromium (Playwright installs its own headless version)
-
----
-
-## ⚙️ Installation (Step-by-Step)
-
-### 1. Clone this repository
-
-```bash
-git clone https://github.com/HarisNadeem471/Google-maps-scrapper-for-business-.git
-cd google-maps-scraper
-```
-
-### 2. Install Python dependencies
+- After clonning this code, you must go to requirements.txt and uncomment the pandas
+- After that, you must run the following command to install all the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Install Playwright browser binaries
+- After that, you must run the following command to install playwright:
+
+```bash
+playwright install chromium
+```
+
+- After that, you must run the following command to install playwright:
 
 ```bash
 playwright install
 ```
 
----
-
-## 🚀 Usage
-
-### ✅ Option A: Run both scripts with one command
-
-```bash
-python run_all.py
-```
-
-### ⚙️ Option B: Run scripts manually
-
-#### Step 1: Convert CSV to JSON
+- Then you have to run convert script to convert csv to json
 
 ```bash
 python convert_csv_to_json.py
 ```
 
-#### Step 2: Scrape data from Google Maps
+- Then you must split urls by running this file:
 
 ```bash
-python fallback_playwright_scraper.py
+python split_links_interactive.py
 ```
 
----
+- Note that when you run split file you will be asked some questions like
+- start index (e.g. 1)
+- end index (e.g. 100)
+- chunk size (Select how many urls you want to scrape in one container)
 
-## 📁 Output Files
+- Then you've to build docker image and run it by running this command
+  - Note that you can duplicated containers services like if you have 15 chunks then you've to create 15 containers you can do it by editing compose file go to gpt and ask it i want to duplicate this service 15 times and then copy and paste it after that you must run this command below:
 
-| File Name             | Description                                           |
-|----------------------|-------------------------------------------------------|
-| `links.json`         | JSON array of cleaned Google Maps URLs               |
-| `output_results.csv` | Final scraped business data                           |
-| `failed_links.csv`   | List of URLs that failed during scraping with reason  |
+```bash
+docker compose up --build
+```
 
+This command will first build the image and then scrap the data

@@ -7,3 +7,129 @@ services:
       - ./chunks:/app/chunks
       - ./output:/app/output
     command: python fallback_playwright_scraper.py --input chunks/links_part_1.json --output output/output_scraper_1.csv --failed output/failed_links_1.csv
+
+  scraper_2:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_2
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_2.json --output output/output_scraper_2.csv --failed output/failed_links_2.csv
+
+  scraper_3:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_3
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_3.json --output output/output_scraper_3.csv --failed output/failed_links_3.csv
+
+  scraper_4:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_4
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_4.json --output output/output_scraper_4.csv --failed output/failed_links_4.csv
+
+  scraper_5:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_5
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_5.json --output output/output_scraper_5.csv --failed output/failed_links_5.csv
+
+  scraper_6:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_6
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_6.json --output output/output_scraper_6.csv --failed output/failed_links_6.csv
+
+  scraper_7:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_7
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_7.json --output output/output_scraper_7.csv --failed output/failed_links_7.csv
+
+  scraper_8:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_8
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_8.json --output output/output_scraper_8.csv --failed output/failed_links_8.csv
+
+  scraper_9:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_9
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_9.json --output output/output_scraper_9.csv --failed output/failed_links_9.csv
+
+  scraper_10:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_10
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_10.json --output output/output_scraper_10.csv --failed output/failed_links_10.csv
+
+  scraper_11:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_11
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_11.json --output output/output_scraper_11.csv --failed output/failed_links_11.csv
+
+  scraper_12:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_12
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_12.json --output output/output_scraper_12.csv --failed output/failed_links_12.csv
+
+  scraper_13:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_13
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_13.json --output output/output_scraper_13.csv --failed output/failed_links_13.csv
+
+  scraper_14:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_14
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_14.json --output output/output_scraper_14.csv --failed output/failed_links_14.csv
+
+  scraper_15:
+    image: gmaps-scraper
+    build: .
+    container_name: scraper_15
+    volumes:
+      - ./chunks:/app/chunks
+      - ./output:/app/output
+    command: python fallback_playwright_scraper.py --input chunks/links_part_15.json --output output/output_scraper_15.csv --failed output/failed_links_15.csv
